@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guoqz.gongyu.dao.PersonDao">
+
+    <!--关联查询-->
+    <resultMap id="personMap" type="person">
+        <id column="id" property="id"/>
+        <association column="company_id" property="company" javaType="company"
+                     select="com.guoqz.gongyu.dao.CompanyDao.selectCompanyById"/>
+        <association column="flats_id" property="flats" javaType="flats"
+                     select="com.guoqz.gongyu.dao.FlatsDao.selectFlatsById"/>
+    </resultMap>
+
+    <select id="selectAllPerson" resultMap="personMap">
+        select *
+        from tb_person
+    </select>
+
+    <select id="selectPersons" resultMap="personMap">
+        select *
+        from tb_person
+        <where>
+            <if test="name != null and name != ''">
+                name like concat('%',#{name},'%')
+            </if>
+            <if test="companyId != null">
+                and company_id = #{companyId}
+            </if>
+            <if test="flatsId != null">
+                and flats_id = #{flatsId}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectPersonByName" resultType="person">
+        select *
+        from tb_person
+        where `name` = #{name}
+    </select>
+
+    <insert id="insertPerson">
+        insert into tb_person(`name`, phone, email, sex, address, birthday, company_id, flats_id)
+        values (#{name}, #{phone}, #{email}, #{sex}, #{address}, #{birthday}, #{companyId}, #{flatsId})
+    </insert>
+
+    <select id="selectPersonById" resultType="person">
+        select *
+        from tb_person
+        where id = #{id};
+    </select>
+
+    <update id="updatePerson">
+        update tb_person
+        <set>
+            <if test="name != null and name != ''">
+                name = #{name},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="sex != null and sex != ''">
+                sex = #{sex},
+            </if>
+            <if test="address != null and address != ''">
+                address = #{address},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday},
+            </if>
+            <if test="companyId != null">
+                company_id = #{companyId},
+            </if>
+            <if test="flatsId != null">
+                flats_id = #{flatsId},
+            </if>
+        </set>
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+        </where>
+    </update>
+
+    <delete id="deletePersonById">
+        delete
+        from tb_person
+        where id = #{id}
+    </delete>
+
+    <select id="selectPersonByCompanyId" resultType="person">
+        select *
+        from tb_person
+        where company_id = #{companyId}
+    </select>
+
+
+    <select id="selectPersonByFlatsId" resultType="person">
+        select *
+        from tb_person
+        where flats_id = #{flatsId}
+    </select>
+</mapper>

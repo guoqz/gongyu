@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guoqz.gongyu.dao.AdminDao">
+
+    <select id="selectAdminByUsernameAndPassword" resultType="admin">
+        select *
+        from tb_admin
+        where username = #{username}
+          and password = #{password}
+    </select>
+
+    <update id="updateAdmin">
+        update tb_admin
+        <set>
+            <if test="username != null and username != ''">
+                username = #{username},
+            </if>
+            <if test="password != null and password != ''">
+                password = #{password},
+            </if>
+            <if test="nickname != null and nickname != ''">
+                nickname = #{nickname},
+            </if>
+            <if test="roleId != null">
+                role_id = #{roleId},
+            </if>
+            <if test="roleName != null and roleName != ''">
+                role_name = #{roleName},
+            </if>
+            <if test="sex != null and sex != ''">
+                sex = #{sex},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+        </set>
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+        </where>
+    </update>
+
+    <select id="selectAdminById" resultType="admin">
+        select *
+        from tb_admin
+        where id = #{id}
+    </select>
+
+    <select id="getAllAdmin" resultType="admin">
+        select *
+        from tb_admin
+    </select>
+
+    <select id="selectAdminByUsername" resultType="admin">
+        select *
+        from tb_admin
+        where `username` = #{username};
+    </select>
+
+    <insert id="insertAdmin">
+        insert into tb_admin(username, password, nickname, role_id, role_name, sex, phone, email)
+        values (#{username}, #{password}, #{nickname}, #{roleId}, #{roleName}, #{sex}, #{phone}, #{email})
+    </insert>
+
+    <delete id="deleteAdminById">
+        delete
+        from tb_admin
+        where id = #{id};
+    </delete>
+
+    <select id="selectAdminListByRoleId" resultType="admin">
+        select *
+        from tb_admin
+        where role_id = #{roleId};
+    </select>
+</mapper>

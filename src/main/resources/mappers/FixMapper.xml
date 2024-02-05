@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guoqz.gongyu.dao.FixDao">
+
+    <resultMap id="fixMap" type="fix">
+        <id column="id" property="id"/>
+        <result column="flats_id" property="flatsId"/>
+        <result column="fix_people_id" property="fixPeopleId"/>
+        <association property="flats" column="flats_id" select="com.guoqz.gongyu.dao.FlatsDao.selectFlatsById"/>
+        <association property="fixPeople" column="fix_people_id"
+                     select="com.guoqz.gongyu.dao.AdminDao.selectAdminById"/>
+    </resultMap>
+    <select id="selectAllFix" resultMap="fixMap">
+        select *
+        from tb_fix
+    </select>
+
+    <insert id="insertFix">
+        insert into tb_fix(fix_time, flats_id, fix_people_id, fix_status, fix_note)
+        values (#{fixTime}, #{flatsId}, #{fixPeopleId}, #{fixStatus}, #{fixNote})
+    </insert>
+
+    <select id="selectFixById" resultType="fix">
+        select *
+        from tb_fix
+        where id = #{id};
+    </select>
+
+    <update id="updateFix">
+        update tb_fix
+        <set>
+            <if test="fixTime != null">
+                fix_time = #{fixTime},
+            </if>
+            <if test="flatsId != null">
+                flats_id = #{flatsId},
+            </if>
+            <if test="fixPeopleId != null">
+                fix_people_id = #{fixPeopleId},
+            </if>
+            <if test="fixStatus != null">
+                fix_status = #{fixStatus},
+            </if>
+            <if test="fixNote != null and fixNote != ''">
+                fix_note = #{fixNote}
+            </if>
+        </set>
+        <where>
+            <if test="id != null">
+                id =#{id}
+            </if>
+        </where>
+    </update>
+
+    <delete id="deleteFixById">
+        delete
+        from tb_fix
+        where id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guoqz.gongyu.dao.CompanyDao">
+
+    <select id="selectAllCompany" resultType="company">
+        select *
+        from tb_company
+    </select>
+
+    <select id="selectCompanyById" resultType="company">
+        select *
+        from tb_company
+        where id = #{id}
+    </select>
+
+
+    <!-- 查询所有公司（包含人员） -->
+    <resultMap id="companyMap" type="company">
+        <id column="id" property="id"/>
+        <collection property="personList" column="id" ofType="person"
+                    select="com.guoqz.gongyu.dao.PersonDao.selectPersonByCompanyId"/>
+    </resultMap>
+    <select id="selectAllCompanyIncludePerson" resultMap="companyMap">
+        select *
+        from tb_company
+    </select>
+
+    <select id="selectCompanyByName" resultType="company">
+        select *
+        from tb_company
+        where company_name = #{name}
+    </select>
+
+    <insert id="insertCompany">
+        insert into tb_company (company_name, company_address)
+        values (#{companyName}, #{companyAddress})
+    </insert>
+
+    <update id="updatePerson">
+        update tb_company
+        <set>
+            <if test="companyName != null and companyName != ''">
+                company_name = #{companyName},
+            </if>
+            <if test="companyAddress != null and companyAddress != ''">
+                company_address = #{companyAddress},
+            </if>
+        </set>
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+        </where>
+    </update>
+
+    <delete id="deleteCompanyById">
+        delete
+        from tb_company
+        where id = #{id};
+    </delete>
+</mapper>

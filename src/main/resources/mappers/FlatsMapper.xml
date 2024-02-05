@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guoqz.gongyu.dao.FlatsDao">
+
+    <select id="selectAllFlats" resultType="flats">
+        select *
+        from tb_flats
+    </select>
+
+    <select id="selectFlatsById" resultType="flats">
+        select *
+        from tb_flats
+        where id = #{id}
+    </select>
+
+
+    <resultMap id="flatsMap" type="flats">
+        <id column="id" property="id"/>
+        <collection property="personList" column="id" ofType="person"
+                    select="com.guoqz.gongyu.dao.PersonDao.selectPersonByFlatsId"/>
+    </resultMap>
+    <select id="selectAllFlatsIncludePerson" resultMap="flatsMap">
+        select *
+        from tb_flats
+    </select>
+
+    <select id="selectFlatsByName" resultType="flats">
+        select *
+        from tb_flats
+        where flats_name = #{name};
+    </select>
+
+    <insert id="insertFlats">
+        insert into tb_flats(flats_name, flats_photo)
+        values (#{flatsName}, #{flatsPhoto})
+    </insert>
+
+    <update id="updateFlats">
+        update tb_flats
+        <set>
+            <if test="flatsName != null and flatsName != ''">
+                flats_name = #{flatsName},
+            </if>
+            <if test="flatsPhoto != null and flatsPhoto != ''">
+                flats_photo = #{flatsPhoto},
+            </if>
+        </set>
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+        </where>
+    </update>
+
+    <delete id="deleteFlatsById">
+        delete
+        from tb_flats
+        where id = #{id}
+    </delete>
+</mapper>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guoqz.gongyu.dao.CleanDao">
+
+    <resultMap id="cleanMap" type="clean">
+        <id column="id" property="id"/>
+        <result column="flats_id" property="flatsId"/>
+        <result column="person_id" property="personId"/>
+        <association property="flats" column="flats_id"
+                     select="com.guoqz.gongyu.dao.FlatsDao.selectFlatsById"/>
+        <association property="person" column="person_id"
+                     select="com.guoqz.gongyu.dao.PersonDao.selectPersonById"/>
+    </resultMap>
+    <select id="selectAllClean" resultMap="cleanMap">
+        select *
+        from tb_clean
+    </select>
+
+    <insert id="insertClean">
+        insert into tb_clean(clean_time, person_id, clean_level, flats_id)
+        values (#{cleanTime}, #{personId}, #{cleanLevel}, #{flatsId})
+    </insert>
+
+    <select id="selectCleanById" resultMap="cleanMap">
+        select *
+        from tb_clean
+        where id = #{id};
+    </select>
+
+    <update id="updateClean">
+        update tb_clean
+        <set>
+            <if test="cleanTime != null">
+                clean_time = #{cleanTime},
+            </if>
+            <if test="personId != null">
+                person_id = #{personId},
+            </if>
+            <if test="cleanLevel != null">
+                clean_level = #{cleanLevel},
+            </if>
+            <if test="flatsId != null">
+                flats_id = #{flatsId},
+            </if>
+        </set>
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+        </where>
+    </update>
+
+    <delete id="deleteCleanById">
+        delete
+        from tb_clean
+        where id = #{id};
+    </delete>
+</mapper>

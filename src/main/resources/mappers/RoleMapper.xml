@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.guoqz.gongyu.dao.RoleDao">
+
+    <select id="selectAllRole" resultType="role">
+        select *
+        from tb_role
+    </select>
+
+    <select id="selectRoleById" resultType="com.guoqz.gongyu.bean.Role">
+        select *
+        from tb_role
+        where id = #{id};
+    </select>
+
+</mapper>
